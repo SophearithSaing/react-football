@@ -4,19 +4,23 @@ import Chip from '@mui/material/Chip';
 import Card from '@mui/material/Card';
 import Modal from '@mui/material/Modal';
 import Context from '../store/context';
+import CircularProgress from '@mui/material/CircularProgress';
 
 export default function Matches() {
   const context = useContext(Context);
   const [open, setOpen] = useState(false);
-  const [league, setLeague] = useState('la-liga');
-  const [leagueID, setLeagueID] = useState('140');
+  const [league, setLeague] = useState('');
   const [matches, setMatches] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
+
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
-  const changeLeagueHandler = async (event) => {
-    setLeague(event.currentTarget.getAttribute('data-league'));
-    setLeagueID(event.currentTarget.getAttribute('data-league-id'));
 
+  const changeLeagueHandler = async (event) => {
+    setIsLoading(true);
+    setLeague(event.currentTarget.getAttribute('data-league'));
+
+    const leagueID = event.currentTarget.getAttribute('data-league-id');
     let date = context.date;
     if (date === '') {
       const today = new Date();
@@ -37,7 +41,9 @@ export default function Matches() {
     );
 
     const data = await response.json();
+    // console.log(data.response);
     setMatches(data.response);
+    setIsLoading(false);
   };
 
   const formatMatchTime = (time) => {
@@ -46,7 +52,7 @@ export default function Matches() {
     const number = time[0].split(':');
     number.pop();
     return `${number[0]}:${number[1]} ${time[1]}`;
-  }
+  };
   return (
     <div className='matches'>
       <div className='matches__tournaments'>
@@ -91,6 +97,7 @@ export default function Matches() {
           onClick={changeLeagueHandler}
         />
       </div>
+      {isLoading && <CircularProgress className='matches__progress-spinner' />}
       {matches.map((match) => (
         <Card
           className='matches__item'
@@ -106,12 +113,12 @@ export default function Matches() {
               <p>{match.teams.home.name}</p>
             </div>
             <div className='matches__item--score'>
-              {match.goals.home !== null && match.goals.away !== null && (
+              {match.fixture.status !== 'Not Started' && (
                 <p>
                   {match.goals.home} : {match.goals.away}
                 </p>
               )}
-              {!match.goals.home && !match.goals.away && (
+              {match.fixture.status === 'Not Started' && (
                 <p>{formatMatchTime(match.fixture.date)}</p>
               )}
             </div>

@@ -2,6 +2,11 @@
   &__tournaments {
     display: flex;
     gap: 16px;
+    flex-wrap: wrap;
+  }
+  &__progress-spinner {
+    display: block !important;
+    margin: 50px auto;
   }
   &__item {
     margin-top: 16px;
@@ -10,9 +15,14 @@
       padding: 24px;
       display: flex;
       gap: 16px;
-      width: 500px;
       max-width: 100%;
       margin: auto;
+      @media (max-width: 400px) {
+        padding: 16px;
+      }
+      @media (min-width: 767px) {
+        max-width: 500px;
+      }
     }
     &--team {
       width: 40%;
@@ -23,10 +33,16 @@
       img {
         display: inline-block;
         height: 50px;
+        @media (max-width: 400px) {
+          height: 32px;
+        }
       }
       p {
         display: inline-block;
         margin: 0;
+        @media (max-width: 400px) {
+          font-size: 14px;
+        }
       }
     }
     &--score {
