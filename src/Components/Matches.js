@@ -17,6 +17,7 @@ export default function Matches() {
   const handleClose = () => setOpen(false);
 
   const changeLeagueHandler = async (event) => {
+    setMatches([]);
     setIsLoading(true);
     setLeague(event.currentTarget.getAttribute('data-league'));
 
@@ -113,12 +114,12 @@ export default function Matches() {
               <p>{match.teams.home.name}</p>
             </div>
             <div className='matches__item--score'>
-              {match.fixture.status !== 'Not Started' && (
+              {match.fixture.status.long !== 'Not Started' && (
                 <p>
                   {match.goals.home} : {match.goals.away}
                 </p>
               )}
-              {match.fixture.status === 'Not Started' && (
+              {match.fixture.status.long === 'Not Started' && (
                 <p>{formatMatchTime(match.fixture.date)}</p>
               )}
             </div>

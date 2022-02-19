@@ -13,7 +13,7 @@ h1 {
 }
 
 .app {
-  padding: 24px;
+  padding: 24px 24px 100px;
   min-height: 100vh;
   position: relative;
   .attribution {
@@ -21,7 +21,9 @@ h1 {
     bottom: 16px;
     left: 50%;
     transform: translateX(-50%);
-    color: #000;
+    a {
+      color: #000;
+    }
   }
 }
 

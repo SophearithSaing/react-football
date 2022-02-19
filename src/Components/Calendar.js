@@ -14,7 +14,7 @@ export default function Calendar() {
       today.getMonth() + 1 < 10
         ? '0' + (today.getMonth() + 1)
         : today.getMonth() + 1;
-    const fullDateString = `${today.getFullYear()}-${month}-${today.getDate()}`;
+    const fullDateString = `${today.getFullYear()}-${month}-${today.getDate() + i}`;
     dateArr.push({
       date: today.getDate() + i,
       month: new Date(fullDateString).toLocaleString('en-US', {
