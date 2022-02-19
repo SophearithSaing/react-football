@@ -14,6 +14,15 @@ h1 {
 
 .app {
   padding: 24px;
+  min-height: 100vh;
+  position: relative;
+  .attribution {
+    position: absolute;
+    bottom: 16px;
+    left: 50%;
+    transform: translateX(-50%);
+    color: #000;
+  }
 }
 
 .saved-matches {
