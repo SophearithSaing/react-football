@@ -1,17 +1,52 @@
-import React from 'react';
+import { useContext, useState } from 'react';
 import './Matches.scss';
 import Chip from '@mui/material/Chip';
 import Card from '@mui/material/Card';
 import Modal from '@mui/material/Modal';
+import Context from '../store/context';
 
 export default function Matches() {
-  const [open, setOpen] = React.useState(false);
-  const [league, setLeague] = React.useState('la-liga');
+  const context = useContext(Context);
+  const [open, setOpen] = useState(false);
+  const [league, setLeague] = useState('la-liga');
+  const [leagueID, setLeagueID] = useState('140');
+  const [matches, setMatches] = useState([]);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
-  const changeLeagueHandler = (event) => {
+  const changeLeagueHandler = async (event) => {
     setLeague(event.currentTarget.getAttribute('data-league'));
+    setLeagueID(event.currentTarget.getAttribute('data-league-id'));
+
+    let date = context.date;
+    if (date === '') {
+      const today = new Date();
+      const month =
+        today.getMonth() + 1 < 10
+          ? '0' + (today.getMonth() + 1)
+          : today.getMonth() + 1;
+      date = `${today.getFullYear()}-${month}-${today.getDate()}`;
+    }
+
+    const response = await fetch(
+      `https://v3.football.api-sports.io/fixtures?league=${leagueID}&season=2021&date=${date}&timezone=Asia/Phnom_Penh`,
+      {
+        headers: {
+          'x-apisports-key': 'cecd3586b04e7c5ec4f347e8b9278b36',
+        },
+      }
+    );
+
+    const data = await response.json();
+    setMatches(data.response);
   };
+
+  const formatMatchTime = (time) => {
+    time = new Date(time).toLocaleTimeString();
+    time = time.split(' ');
+    const number = time[0].split(':');
+    number.pop();
+    return `${number[0]}:${number[1]} ${time[1]}`;
+  }
   return (
     <div className='matches'>
       <div className='matches__tournaments'>
@@ -20,6 +55,7 @@ export default function Matches() {
           color='primary'
           label='Premier League'
           data-league='premier-league'
+          data-league-id='39'
           onClick={changeLeagueHandler}
         />
         <Chip
@@ -27,6 +63,7 @@ export default function Matches() {
           color='primary'
           label='La Liga'
           data-league='la-liga'
+          data-league-id='140'
           onClick={changeLeagueHandler}
         />
         <Chip
@@ -34,6 +71,7 @@ export default function Matches() {
           color='primary'
           label='Bundesliga'
           data-league='bundesliga'
+          data-league-id='78'
           onClick={changeLeagueHandler}
         />
         <Chip
@@ -41,6 +79,7 @@ export default function Matches() {
           color='primary'
           label='Serie A'
           data-league='serie-a'
+          data-league-id='135'
           onClick={changeLeagueHandler}
         />
         <Chip
@@ -48,30 +87,44 @@ export default function Matches() {
           color='primary'
           label='League 1'
           data-league='league-1'
+          data-league-id='61'
           onClick={changeLeagueHandler}
         />
       </div>
-      <Card className='matches__item' onClick={handleOpen}>
-        <div className='matches__item--content'>
-          <div className='matches__item--team'>
-            <img
-              src='https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTUcqGcoElVJ4JRk0hh2ips5R3yRvmzeYk8gkG-WN3O1-gD0W3lS-I7XVnA9CttQoPgZaQ&usqp=CAU'
-              alt=''
-            />
-            <p>Real Madrid</p>
+      {matches.map((match) => (
+        <Card
+          className='matches__item'
+          onClick={handleOpen}
+          key={match.fixture.id}
+        >
+          <div className='matches__item--content'>
+            <div className='matches__item--team'>
+              <img
+                src={match.teams.home.logo}
+                alt={`${match.teams.home.name} logo`}
+              />
+              <p>{match.teams.home.name}</p>
+            </div>
+            <div className='matches__item--score'>
+              {match.goals.home !== null && match.goals.away !== null && (
+                <p>
+                  {match.goals.home} : {match.goals.away}
+                </p>
+              )}
+              {!match.goals.home && !match.goals.away && (
+                <p>{formatMatchTime(match.fixture.date)}</p>
+              )}
+            </div>
+            <div className='matches__item--team'>
+              <p>{match.teams.away.name}</p>
+              <img
+                src={match.teams.away.logo}
+                alt={`${match.teams.away.name} logo`}
+              />
+            </div>
           </div>
-          <div className='matches__item--score'>
-            <p>3 : 2</p>
-          </div>
-          <div className='matches__item--team'>
-            <p>Barcelona</p>
-            <img
-              src='https://upload.wikimedia.org/wikipedia/sco/thumb/4/47/FC_Barcelona_%28crest%29.svg/2020px-FC_Barcelona_%28crest%29.svg.png'
-              alt=''
-            />
-          </div>
-        </div>
-      </Card>
+        </Card>
+      ))}
       <Modal
         open={open}
         onClose={handleClose}
@@ -99,48 +152,6 @@ export default function Matches() {
           </div>
         </Card>
       </Modal>
-      <Card className='matches__item'>
-        <div className='matches__item--content'>
-          <div className='matches__item--team'>
-            <img
-              src='https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTUcqGcoElVJ4JRk0hh2ips5R3yRvmzeYk8gkG-WN3O1-gD0W3lS-I7XVnA9CttQoPgZaQ&usqp=CAU'
-              alt=''
-            />
-            <p>Real Madrid</p>
-          </div>
-          <div className='matches__item--score'>
-            <p>3 : 2</p>
-          </div>
-          <div className='matches__item--team'>
-            <p>Barcelona</p>
-            <img
-              src='https://upload.wikimedia.org/wikipedia/sco/thumb/4/47/FC_Barcelona_%28crest%29.svg/2020px-FC_Barcelona_%28crest%29.svg.png'
-              alt=''
-            />
-          </div>
-        </div>
-      </Card>
-      <Card className='matches__item'>
-        <div className='matches__item--content'>
-          <div className='matches__item--team'>
-            <img
-              src='https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTUcqGcoElVJ4JRk0hh2ips5R3yRvmzeYk8gkG-WN3O1-gD0W3lS-I7XVnA9CttQoPgZaQ&usqp=CAU'
-              alt=''
-            />
-            <p>Real Madrid</p>
-          </div>
-          <div className='matches__item--score'>
-            <p>3 : 2</p>
-          </div>
-          <div className='matches__item--team'>
-            <p>Barcelona</p>
-            <img
-              src='https://upload.wikimedia.org/wikipedia/sco/thumb/4/47/FC_Barcelona_%28crest%29.svg/2020px-FC_Barcelona_%28crest%29.svg.png'
-              alt=''
-            />
-          </div>
-        </div>
-      </Card>
     </div>
   );
 }

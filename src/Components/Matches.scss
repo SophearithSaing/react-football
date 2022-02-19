@@ -18,10 +18,8 @@
       width: 40%;
       display: flex;
       align-items: center;
+      justify-content: space-between;
       gap: 16px;
-      &:first-child {
-        justify-content: flex-end;
-      }
       img {
         display: inline-block;
         height: 50px;
