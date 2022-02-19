@@ -1,0 +1,64 @@
+.matches {
+  &__tournaments {
+    display: flex;
+    gap: 16px;
+  }
+  &__item {
+    margin-top: 16px;
+    cursor: pointer;
+    &--content {
+      padding: 24px;
+      display: flex;
+      gap: 16px;
+      width: 500px;
+      max-width: 100%;
+      margin: auto;
+    }
+    &--team {
+      width: 40%;
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      &:first-child {
+        justify-content: flex-end;
+      }
+      img {
+        display: inline-block;
+        height: 50px;
+      }
+      p {
+        display: inline-block;
+        margin: 0;
+      }
+    }
+    &--score {
+      width: 20%;
+      text-align: center;
+    }
+  }
+}
+
+.stats {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 400px;
+  background-color: white;
+  padding: 24px;
+  border: none;
+  outline: none;
+  display: flex;
+  &__home {
+    width: 30%;
+    text-align: left;
+  }
+  &__type {
+    width: 40%;
+    text-align: center;
+  }
+  &__away {
+    width: 30%;
+    text-align: right;
+  }
+}
