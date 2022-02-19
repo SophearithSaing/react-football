@@ -3,3 +3,65 @@
     text-align: center;
   }
 }
+
+body {
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+h1 {
+  text-align: center;
+}
+
+.app {
+  padding: 24px;
+}
+
+.saved-matches {
+  padding: 16px;
+  text-align: center;
+  overflow-x: scroll;
+  overflow-y: hidden;
+  white-space: nowrap;
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+.saved-matches::-webkit-scrollbar {
+  display: none;
+}
+.saved-match {
+  width: 50%;
+  display: inline-block;
+  margin-right: 24px;
+  padding: 16px;
+}
+.saved-match__tournament {
+  font-size: 30px;
+  margin: 0 0 10px;
+}
+.saved-match__detail {
+  display: flex;
+  justify-content: space-between;
+}
+.saved-match__detail--team {
+  width: 30%;
+}
+.saved-match__detail--team img{
+  height: 75px;
+  object-fit: contain;
+  margin: auto;
+  display: block;
+}
+.saved-match__detail--team h6 {
+  font-size: 18px;
+  margin: 16px 0;
+}
+.saved-match__detail--score {
+  width: 30%;
+  font-size: 32px;
+}
+
+@media (max-width: 576px) {
+  .saved-match {
+    width: 90%;
+  }
+}

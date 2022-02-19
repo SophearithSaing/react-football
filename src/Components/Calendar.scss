@@ -1,0 +1,13 @@
+@import url('../App.scss');
+.calendar {
+  width: 100%;
+  display: flex;
+  justify-content: space-around;
+  @media (max-width: 768px) {
+    justify-content: space-between;
+  }
+  &__date {
+    display: flex;
+    flex-direction: column;
+  }
+}
