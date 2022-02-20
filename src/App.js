@@ -11,12 +11,10 @@ import { Fragment, useState } from 'react';
 import Standings from './Components/Standings';
 
 function App() {
-  const [value, setValue] = useState(1);
+  const [value, setValue] = useState(0);
 
   return (
     <div className='app'>
-      <h1>Untitled Football Project</h1>
-
       {value === 0 && (
         <Fragment>
           <Calendar />
