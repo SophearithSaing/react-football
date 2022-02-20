@@ -11,14 +11,47 @@ export default function Matches() {
   const [open, setOpen] = useState(false);
   const [league, setLeague] = useState('');
   const [matches, setMatches] = useState([]);
-  const [isLoading, setIsLoading] = useState(false);
+  const [goals, setGoals] = useState({});
+  const [teams, setTeams] = useState({});
+  const [homeStat, setHomeStat] = useState([]);
+  const [awayStat, setAwayStat] = useState([]);
+  const [loadMatches, setLoadMatches] = useState(false);
+  const [loadFixture, setloadFixture] = useState(false);
 
-  const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
+
+  const handleOpen = async (event) => {
+    setOpen(true);
+    setloadFixture(true);
+    setTeams({});
+    setGoals({});
+    setHomeStat([]);
+    setAwayStat([]);
+
+    const fixtureID = event.currentTarget.getAttribute('data-id');
+    console.log(`https://v3.football.api-sports.io/fixtures?id=${fixtureID}`);
+    const response = await fetch(
+      `https://v3.football.api-sports.io/fixtures?id=${fixtureID}`,
+      {
+        headers: {
+          'x-apisports-key': 'cecd3586b04e7c5ec4f347e8b9278b36',
+        },
+      }
+    );
+
+    const data = await response.json();
+    const fixture = await data.response[0];
+
+    setTeams(fixture.teams);
+    setGoals(fixture.goals);
+    setHomeStat(fixture.statistics[0].statistics);
+    setAwayStat(fixture.statistics[1].statistics);
+    setloadFixture(false);
+  }
 
   const changeLeagueHandler = async (event) => {
     setMatches([]);
-    setIsLoading(true);
+    setLoadMatches(true);
     setLeague(event.currentTarget.getAttribute('data-league'));
 
     const leagueID = event.currentTarget.getAttribute('data-league-id');
@@ -44,7 +77,7 @@ export default function Matches() {
     const data = await response.json();
     // console.log(data.response);
     setMatches(data.response);
-    setIsLoading(false);
+    setLoadMatches(false);
   };
 
   const formatMatchTime = (time) => {
@@ -98,12 +131,13 @@ export default function Matches() {
           onClick={changeLeagueHandler}
         />
       </div>
-      {isLoading && <CircularProgress className='matches__progress-spinner' />}
+      {loadMatches && <CircularProgress className='progress-spinner' />}
       {matches.map((match) => (
         <Card
           className='matches__item'
-          onClick={handleOpen}
+          onClick={match.fixture.status.long !== 'Not Started' ? handleOpen : undefined}
           key={match.fixture.id}
+          data-id={match.fixture.id}
         >
           <div className='matches__item--content'>
             <div className='matches__item--team'>
@@ -140,24 +174,19 @@ export default function Matches() {
         aria-describedby='modal-modal-description'
       >
         <Card className='stats'>
-          <div className='stats__home'>
-            <p>Real Madrid</p>
-            <p>1</p>
-            <p>2</p>
-            <p>3</p>
-          </div>
-          <div className='stats__type'>
-            <p>3 : 2</p>
-            <p>Shots on Goal</p>
-            <p>Shots off Goal</p>
-            <p>Total Shots</p>
-          </div>
-          <div className='stats__away'>
-            <p>Barcelona</p>
-            <p>1</p>
-            <p>2</p>
-            <p>3</p>
-          </div>
+          {loadFixture && <CircularProgress className='progress-spinner' />}
+          {!loadFixture && <div className='stats__home'>
+            <p className='stats__home--name'>{teams.home?.name}</p>
+            {homeStat.map(stat => <p key={stat.type}>{stat.value !== null ? stat.value : 'N/A'}</p>)}
+          </div>}
+          {!loadFixture && <div className='stats__type'>
+            <p className='stats__type--scores'>{goals.home} : {goals.away}</p>
+            {homeStat.map(stat => <p key={stat.type}>{stat.type}</p>)}
+          </div>}
+          {!loadFixture && <div className='stats__away'>
+            <p className='stats__away--name'>{teams.away?.name}</p>
+            {awayStat.map(stat => <p key={stat.type}>{stat.value !== null ? stat.value : 'N/A'}</p>)}
+          </div>}
         </Card>
       </Modal>
     </div>
