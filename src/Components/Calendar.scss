@@ -8,6 +8,7 @@
   &__date {
     display: flex;
     flex-direction: column;
+    transition: all .3 ease;
     @media (max-width: 400px) {
       min-width: 40px !important;
       max-width: 40px !important;

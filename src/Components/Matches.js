@@ -147,6 +147,16 @@ export default function Matches() {
               />
               <p>{match.teams.home.name}</p>
             </div>
+            <div className='matches__item--xs-score'>
+              {match.fixture.status.long !== 'Not Started' && (
+                <p>
+                  {match.goals.home}
+                </p>
+              )}
+              {match.fixture.status.long === 'Not Started' && (
+                <p>{formatMatchTime(match.fixture.date)}</p>
+              )}
+            </div>
             <div className='matches__item--score'>
               {match.fixture.status.long !== 'Not Started' && (
                 <p>
@@ -157,12 +167,19 @@ export default function Matches() {
                 <p>{formatMatchTime(match.fixture.date)}</p>
               )}
             </div>
-            <div className='matches__item--team'>
+            <div className='matches__item--team away-team'>
               <p>{match.teams.away.name}</p>
               <img
                 src={match.teams.away.logo}
                 alt={`${match.teams.away.name} logo`}
               />
+            </div>
+            <div className='matches__item--xs-score'>
+              {match.fixture.status.long !== 'Not Started' && (
+                <p>
+                  {match.goals.away}
+                </p>
+              )}
             </div>
           </div>
         </Card>
