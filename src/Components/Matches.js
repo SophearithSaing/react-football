@@ -29,7 +29,6 @@ export default function Matches() {
     setAwayStat([]);
 
     const fixtureID = event.currentTarget.getAttribute('data-id');
-    console.log(`https://v3.football.api-sports.io/fixtures?id=${fixtureID}`);
     const response = await fetch(
       `https://v3.football.api-sports.io/fixtures?id=${fixtureID}`,
       {
@@ -40,7 +39,7 @@ export default function Matches() {
     );
 
     const data = await response.json();
-    const fixture = await data.response[0];
+    const fixture = data.response[0];
 
     setTeams(fixture.teams);
     setGoals(fixture.goals);

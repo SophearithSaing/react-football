@@ -1,0 +1,28 @@
+.standings {
+  &__tournaments {
+    display: flex;
+    gap: 16px;
+    flex-wrap: wrap;
+  }
+  &__table {
+    margin: 24px 0;
+    padding: 16px;
+    &--team-name {
+      min-width: 150px;
+      div {
+        display: flex !important;
+        align-items: center;
+      }
+      img {
+        height: 24px;
+        margin-right: 8px;
+      }
+      p {
+        margin: 0;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+    }
+  }
+}
