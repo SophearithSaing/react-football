@@ -81,15 +81,16 @@ export default function Standings() {
           onClick={changeLeagueHandler}
         />
       </div>
-      
+
       {isLoading && <CircularProgress className='progress-spinner' />}
       {!isLoading && standings.length > 0 && (
-      <TableContainer component={Card} className='standings__table'>
+        <TableContainer component={Card} className='standings__table'>
           <Table>
             <TableHead>
               <TableRow>
                 <TableCell>No.</TableCell>
                 <TableCell>Club</TableCell>
+                <TableCell>Pts</TableCell>
                 <TableCell>MP</TableCell>
                 <TableCell>W</TableCell>
                 <TableCell>D</TableCell>
@@ -97,7 +98,6 @@ export default function Standings() {
                 <TableCell>GF</TableCell>
                 <TableCell>GA</TableCell>
                 <TableCell>GD</TableCell>
-                <TableCell>Pts</TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
@@ -106,10 +106,14 @@ export default function Standings() {
                   <TableCell>{team.rank}</TableCell>
                   <TableCell className='standings__table--team-name'>
                     <div>
-                      <img src={team.team.logo} alt={`${team.team.name} logo`} />
+                      <img
+                        src={team.team.logo}
+                        alt={`${team.team.name} logo`}
+                      />
                       <p>{team.team.name}</p>
                     </div>
                   </TableCell>
+                  <TableCell>{team.points}</TableCell>
                   <TableCell>{team.all.played}</TableCell>
                   <TableCell>{team.all.win}</TableCell>
                   <TableCell>{team.all.draw}</TableCell>
@@ -117,12 +121,11 @@ export default function Standings() {
                   <TableCell>{team.all.goals.for}</TableCell>
                   <TableCell>{team.all.goals.against}</TableCell>
                   <TableCell>{team.goalsDiff}</TableCell>
-                  <TableCell>{team.points}</TableCell>
                 </TableRow>
               ))}
             </TableBody>
           </Table>
-      </TableContainer>
+        </TableContainer>
       )}
     </div>
   );

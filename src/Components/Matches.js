@@ -84,7 +84,11 @@ export default function Matches() {
     time = time.split(' ');
     const number = time[0].split(':');
     number.pop();
-    return `${number[0]}:${number[1]} ${time[1]}`;
+    if (time[1]) {
+      return `${number[0]}:${number[1]} ${time[1]}`;
+    } else {
+      return `${number[0]}:${number[1]}`;
+    }
   };
   return (
     <div className='matches'>
