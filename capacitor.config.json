@@ -1,0 +1,6 @@
+{
+  "appId": "dev.sophearith.reactfootball",
+  "appName": "react-football",
+  "webDir": "build",
+  "bundledWebRuntime": false
+}
